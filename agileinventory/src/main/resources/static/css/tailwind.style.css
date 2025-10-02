@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+
+@source "../../../src/main/resources/static/css/ ";
