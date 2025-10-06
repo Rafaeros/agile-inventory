@@ -23,8 +23,12 @@
       <div class="main-content flex flex-col items-center justify-start min-h-screen pt-10 mt-5">
         <h2 class="text-4xl font-bold mb-6 text-gray-800">Bem vindo ao Agile Inventory</h2>
         <p class="text-lg text-gray-600 mb-8">Sua solução completa para gerenciamento de estoque.</p>
-        <a href="<c:url value='/materials'/>"
-          class="bg-blue-500 text-white w-100 h-50 font-bold flex items-center justify-center rounded-lg hover:bg-blue-600 transition duration-300">Ver Materiais </a>
+        <div class="flex flex-row gap-10 items-center justify-center">
+          <a href="<c:url value='/materials'/>"
+            class="bg-blue-500 text-white w-100 h-50 font-regular flex items-center justify-center rounded-lg hover:bg-blue-600 transition duration-300">Ver Materiais </a>
+          <a href="<c:url value='/orders'/>"
+          class="bg-blue-500 text-white w-100 h-50 font-regular flex items-center justify-center rounded-lg hover:bg-blue-600 transition duration-300">Ver Ordens de Produção </a>
+        </div>
       </div>
 
     </body>

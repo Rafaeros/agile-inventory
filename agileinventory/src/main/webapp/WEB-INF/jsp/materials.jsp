@@ -29,34 +29,29 @@
       </div>
 
       <div class="main-content flex flex-col items-center justify-start min-h-screen">
-        <div class="header flex flex-row items-center justify-center mt-10 gap-5">
-          <h2 class="text-3xl font-bold">Lista de Materiais</h2>
-          <a href="#"
-            class="flex flex-row items-center justify-center gap-3 bg-blue-500 hover:bg-blue-700 text-white font-bold text-3xl px-4 py-2 rounded"><img
-              src="<c:url value='/img/add.png'/>" alt="+">Adicionar</a>
-        </div>
-        <div class="materials flex flex-col items-center justify-start mt-10 w-full max-w-8xl gap-5">
-          
+        <div class="flex flex-col items-center justify-start mt-10 w-full gap-5">
           <c:if test="${not empty materials}">
-            
-            <ul class="w-full flex flex-col gap-5">
+            <!-- UL principal agora ocupa toda a largura -->
+            <ul class="w-screen flex flex-col items-center gap-5 px-10">
               <c:forEach var="material" items="${materials}">
-                <li class="w-full bg-white shadow-md p-5 rounded flex justify-between items-center">
-                  <span class="text-2xl font-medium">${material.productOrder.productionOrderNumber}</span>
-                  <span class="text-2xl font-medium">${material.code}</span>
-                  <span class="text-xl text-gray-600">${material.description}</span>
-                  <span class="text-xl text-gray-600">Quantidade: ${material.quantity}</span>
-                </li>
+                
+                <!-- Linha principal da OP -->
+                <li id="material-${material.id}" 
+                    class="w-full bg-white p-5 rounded shadow-md hover:shadow-lg transition-shadow duration-300 flex justify-between items-center">
+
+                  <div class="flex flex-row items-center justify-between gap-10 w-full">
+                    <span class="font-bold text-3xl">${material.productOrder.orderNumber}</span>
+                    <span class="font-bold text-3xl">${material.code}</span>
+                    <span class="font-bold text-3xl">${material.description}</span>
+                    <span class="font-bold text-3xl">Quantidade: ${material.quantity}</span>
+                  </div>
               </c:forEach>
             </ul>
           </c:if>
-          
           <c:if test="${not empty message}">
             <p class="text-xl">${message}</p>
           </c:if>
         </div>
       </div>
-
     </body>
-
     </html>

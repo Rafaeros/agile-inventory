@@ -4,11 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Controller // <-- Is @Controller present?
+@Controller
 public class HomeController {
 
 
-    @GetMapping("/") // <-- Is the mapping exactly "/"?
+    @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("message", "Olá do Spring Boot com JSP!");
         return "home";

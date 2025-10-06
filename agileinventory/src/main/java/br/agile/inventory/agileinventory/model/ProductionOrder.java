@@ -15,25 +15,39 @@ public class ProductionOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String productionOrderNumber;
+    private String orderNumber;
+    private String description;
+    private int quantity;
 
     @OneToMany(mappedBy = "productOrder")
     private List<Material> materials;
 
-
     private Date createdAt = new Date();
     private Date updatedAt = new Date();
+
     public long getId() {
         return id;
     }
     public void setId(long id) {
         this.id = id;
     }
-    public String getProductionOrderNumber() {
-        return productionOrderNumber;
+    public String getOrderNumber() {
+        return orderNumber;
     }
-    public void setProductionOrderNumber(String productionOrderNumber) {
-        this.productionOrderNumber = productionOrderNumber;
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public int getQuantity() {
+        return quantity;
+    }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
     public List<Material> getMaterials() {
         return materials;
@@ -53,5 +67,5 @@ public class ProductionOrder {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
-
+   
 }

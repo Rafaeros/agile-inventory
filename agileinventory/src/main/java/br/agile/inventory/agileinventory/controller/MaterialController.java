@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import br.agile.inventory.agileinventory.repository.MaterialRepository;
 import br.agile.inventory.agileinventory.model.Material;
 
-@Controller // <-- Is @Controller present?
+@Controller
 public class MaterialController {
 
     private final MaterialRepository materialRepository;
