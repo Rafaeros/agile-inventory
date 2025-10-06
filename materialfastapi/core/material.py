@@ -35,6 +35,8 @@ class MaterialList:
     def create(
         cls,
         product_order: str,
+        product_material: str,
+        product_quantity: int,
         code: str,
         description: str,
         quantity: float,
@@ -46,6 +48,8 @@ class MaterialList:
         if product_order not in cls.instances:
             cls.instances[product_order] = {"materials": []}
 
+        cls.instances[product_order]["product_quantity"] = product_quantity
+        cls.instances[product_order]["product_material"] = product_material
         cls.instances[product_order]["materials"].append(asdict(instance))
 
     @classmethod

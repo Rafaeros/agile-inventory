@@ -79,17 +79,33 @@ class Scraping(requests.Session):
 
             if response.status_code == 404:
                 return {"error": "Production order not found"}
+            
+            # Clear previous instances
+            MaterialList.clear_instances()
 
             soup = BeautifulSoup(response.text, "html.parser")
+            # Get production order number
             element = soup.find("input", {"id": "txtCodigoPrincipal"})
             product_order = str(element["value"]) if element else None  # type: ignore
             if not product_order:
-                return {"error": "Failed to fetch production order page"}
+                return {"error": "Failed to fetch production order number"}
+            
+            # Get production material code
+            product_material = soup.find("input", {"id": "material"})
+            product_material = str(product_material["value"]) if product_material else ""  # type: ignore
+            if not product_material:
+                return {"error": "Failed to fetch production material"}
+            product_material = product_material.split("-")[0].strip()
 
+            # Getting all materials from production order
             all_tables = pd.read_html(StringIO(response.text))
             os_df, mp_df = all_tables[0], all_tables[1]
-            services: list[str] = ["EMBALAGEM/EXPEDICAO", "SEPARACAO MONT"]
+            services: list[str] = ["EMBALAGEM/EXPEDICAO"]
             os_codes = os_df.loc[os_df["Serviço"].isin(services), "Código"].tolist()
+            product_quantity = os_df.loc[os_df["Serviço"].isin(services), "Qtde. Prevista"].tolist()
+            product_quantity = int(float(product_quantity[-1].split(" ")[0].replace(",", ".")))
+            print(f"OS Codes: {os_codes}, Product Quantity: {product_quantity}")
+
             string_inputs: list[str] = [
                 f"Insumos para a OS: {code}" for code in os_codes
             ]
@@ -127,6 +143,7 @@ class Scraping(requests.Session):
                     ]
 
                     description_exclusion_list: list[str] = [
+                        "PAPELÃO",
                         "FITA",
                         "RETRATIL",
                         "ETIQUETA",
@@ -157,8 +174,11 @@ class Scraping(requests.Session):
                     if unit in unit_exclusion_list:
                         continue
 
+                    # Factory method to create Material instances
                     MaterialList.create(
                         product_order,
+                        product_material,
+                        product_quantity,
                         code,
                         description,
                         quantity,
