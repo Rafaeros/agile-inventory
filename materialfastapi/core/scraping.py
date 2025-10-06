@@ -109,26 +109,31 @@ class Scraping(requests.Session):
             string_inputs: list[str] = [
                 f"Insumos para a OS: {code}" for code in os_codes
             ]
+
             for string_input in string_inputs:
-                for _, row in mp_df.iterrows():
-                    if not row["Código"].startswith(string_input):
-                        string_inputs.remove(string_input)
-                        break
+                found = any(row["Código"].startswith(string_input) for _, row in mp_df.iterrows())
+                if not found:
+                    string_inputs.remove(string_input)
+                if found:
+                    print(f"Found section for: {string_input}")
             for string_input in string_inputs:
                 start_index = mp_df.index[
                     mp_df["Código"].str.startswith(string_input)
                 ].tolist()[0]
-                rows = mp_df.iloc[start_index + 1 :]
+                rows = mp_df.iloc[start_index + 1:]
                 for i in range(len(rows)):
                     row = rows.iloc[i]
 
                     if row["Código"].startswith("Insumos"):
                         break
+
                     code: str = row["Código"]
                     description: str = row["Nome"]
                     parts = row["Quantidade"].split(" ")
                     quantity = float(parts[0].replace(",", "."))
                     unit = parts[1].lower() if len(parts) > 1 else ""
+
+                    print(f"Code: {code}, Description: {description}, Quantity: {quantity}, Unit: {unit}")
 
                     code_exclusion_list: list[str] = [
                         "ETQBP",
@@ -188,3 +193,11 @@ class Scraping(requests.Session):
         except RequestException as e:
             print(f"Error fetching production order page: {e}")
             return {"error": "Failed to fetch production order page"}
+        
+
+if __name__ == "__main__":
+    scraper = Scraping("user", "password")
+    if scraper.fetch_csrf_token() and scraper.login():
+        import asyncio
+        data = asyncio.run(scraper.get_materials_of_production_order("38034135"))
+        print(data)
