@@ -8,6 +8,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
 
 @Entity
 public class ProductionOrder {
@@ -16,11 +18,16 @@ public class ProductionOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(unique = true)
+    private long orderId;
+
+    @Column(unique = true)
     private String orderNumber;
+
     private String description;
     private int quantity;
 
-    @OneToMany(mappedBy = "productOrder")
+    @OneToMany(mappedBy = "productOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Material> materials;
 
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -32,6 +39,14 @@ public class ProductionOrder {
     public void setId(long id) {
         this.id = id;
     }
+
+    public long getOrderId() {
+        return orderId;
+    }
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
+    }
+
     public String getOrderNumber() {
         return orderNumber;
     }

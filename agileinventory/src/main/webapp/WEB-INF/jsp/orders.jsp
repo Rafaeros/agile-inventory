@@ -35,7 +35,8 @@
                     <h2 class="text-3xl font-bold">Lista de Ordem de Produção</h2>
                     <a href="#"
                         class="flex flex-row items-center justify-center gap-3 bg-blue-500 hover:bg-blue-700 text-white font-bold text-3xl px-4 py-2 rounded"><img
-                            src="<c:url value='/img/plus.png'/>" class="h-6 w-6" alt="+"><button id="openModalBtn">Adicionar</button></a>
+                            src="<c:url value='/img/plus.png'/>" class="h-6 w-6" alt="+"><button
+                            id="openModalBtn">Adicionar</button></a>
                 </div>
 
                 <!-- Content -->
@@ -82,179 +83,61 @@
                 </div>
             </div>
 
-            <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-start" aria-hidden="true" aria-labelledby="modal-title" role="dialog">
-                    <div id="backdrop" class="absolute inset-0 bg-black/60 transition-opacity"></div>
-                    
-                    <!-- Container central do modal -->
-                    <div class="fixed inset-0 flex justify-start items-center h-full w-full p-4">
-                        <div id="modalPanel"
-                            class="bg-white rounded-2xl shadow-xl w-full mx-auto transform transition-all scale-95 opacity-0"
-                            role="document"
-                            tabindex="-1">
-                            <!-- Cabeçalho -->
-                            <div class="px-6 py-4 border-b">
-                                <h2 id="modal-title" class="text-lg font-semibold text-gray-800">Adicionar Ordem de Produção</h2>
-                            </div>
-                            
-                            <!-- Procurar Itens pelo ID da ordem de produção -->
-                            <div id="search-section">
-                                <input type="number" id="searchInput"
-                                        class="w-7/12 border rounded-md px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                        placeholder="ID da Ordem de Produção EX: 16586558" />
+            <div id="modal" class="fixed inset-0 z-50 hidden items-center mt-5 justify-start max-h-[90vh]"
+                aria-hidden="true" aria-labelledby="modal-title" role="dialog">
+                <div id="backdrop" class="absolute inset-0 bg-black/60 transition-opacity"></div>
 
+                <!-- Container central do modal -->
+                <div
+                    class="fixed inset-0 flex justify-start items-center h-full w-full p-4 max-h[90vh] overflow-y-auto">
+                    <div id="modal-panel"
+                        class="bg-white rounded-2xl shadow-xl w-full h-full mx-auto transform transition-all opacity-0"
+                        role="document" tabindex="-1">
+                        <!-- Cabeçalho -->
+                        <div class="p-6 border-b">
+                            <h2 id="modal-title" class="text-lg font-semibold text-gray-800">Adicionar Ordem de Produção
+                            </h2>
+                        </div>
+
+                        <!-- Procurar Itens pelo ID da ordem de produção -->
+                        <div id="search-section">
+                            <form action="<c:url value='/orders/scrape' />" method="get"
+                                class="flex flex-row items-center justify-center m-2 w-full h-full gap-5"
+                                id="search-form">
+                                <input name="orderId" type="number" id="searchInput"
+                                    class="w-6/12 h-10 border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+                                    placeholder="ID da Ordem de Produção" />
                                 <button id="searchBtn"
-                                        class="w-7/12 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors">
-                                    Procurar
+                                    class="flex items-center justify-center p-3 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition-colors cursor-pointer">
+                                    <img src="<c:url value='/img/search.png'/>" alt="Procurar" class="h-6 w-6">
                                 </button>
-                                <p id="errorMsg" class="text-red-600 text-sm mt-2 hidden">ID não encontrado.</p>
-                                <p id="loadingMsg" class="text-green-600 text-sm mt-2 hidden">Buscando dados...</p>
-                            </div>
-                            
-                            <!-- Corpo do forms -->
-                            <div class="px-6 py-4">
-                                <form id="addOrderForm">
-                                    <label class="block text-sm text-gray-700 mb-2">Nome</label>
-                                    <input type="text" name="name" class="w-7/12 px-3 py-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300" />
+                            </form>
+                            <p id="existsHint" class="hidden font-bold text-sm text-yellow-500 m-3">Ordem de Produção já
+                                Cadastrada!</p>
+                            <p id="searchHint" class="hidden font-bold text-sm text-yellow-500 m-3">Insira o ID da Ordem
+                                de Produção</p>
+                        </div>
 
-                                    <div class="flex justify-between gap-3">
-                                        <button type="button" id="cancelBtn" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Cancelar</button>
-                                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Salvar</button>
-                                    </div>
-                                </form>
-                            </div>
+                        <!-- Corpo do forms -->
+                        <div id="scraping-modal"
+                            class="overflow-y-auto max-h-[80vh] h-full p-5 hidden flex-col items-center justify-start mt-10 mb-10 w-full gap-5">
+                            <form id="scraping-form" class="flex flex-col items-center justify-start mt-10 w-full h-full gap-5">
+                                <!-- Container dos materiais -->
+                                <div id="materials-container"></div>
+                                <button id="submit-order-btn" class="w-7/12 bg-blue-600 text-white py-2 m-5 font-bold rounded-md hover:bg-blue-700 transition-colors"
+                                    type="submit">Salvar
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
+            </div>
 
             <c:if test="${not empty message}">
                 <p class="text-xl">${message}</p>
             </c:if>
 
-            <script>
-                function toggleDropdown(id) {
-                    const content = document.getElementById(id);
-                    const icon = document.getElementById("icon-" + id);
-                    if (content.classList.contains("hidden")) {
-                        content.classList.remove("hidden");
-                        icon.classList.add("rotate-180");
-                    } else {
-                        content.classList.add("hidden");
-                        icon.classList.remove("rotate-180");
-                    }
-                }
-
-                document.getElementById('searchBtn').addEventListener('click', async () => {
-                    const orderId = document.getElementById('searchInput').value.trim();
-                    if (!orderId) return alert("Digite um ID!");
-
-                    console.log('Buscando dados para ID:', orderId);
-
-                    fetch('http://10.48.0.188:8000/scraping/' + orderId)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Erro na requisição: ' + response.status);
-                            }
-                            return response.json(); // Parse a resposta como JSON
-                        })
-                        .then(data => {
-                            console.log('Dados recebidos:', data); // Aqui você manipula os dados da API
-                        })
-                        .catch(error => {
-                            console.error('Erro:', error); // Caso dê algum erro na requisição
-                        });
-                });
-
-
-
-                (function() {
-                    const openBtn = document.getElementById('openModalBtn');
-                    const modal = document.getElementById('modal');
-                    const modalPanel = document.getElementById('modalPanel');
-                    const backdrop = document.getElementById('backdrop');
-                    const cancelBtn = document.getElementById('cancelBtn');
-                    const firstFocusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-                    let lastFocused = null;
-
-                    openBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        showModal();
-                    });
-
-                    function showModal() {
-                        lastFocused = document.activeElement;
-                        modal.classList.remove('hidden');
-                        document.body.style.overflow = 'hidden'; // evita scroll por baixo do modal
-                        // animação simples usando classes do Tailwind (adapte conforme preferir)
-                        requestAnimationFrame(() => {
-                        modalPanel.classList.remove('scale-95', 'opacity-0');
-                        modalPanel.classList.add('scale-100', 'opacity-100');
-                        });
-                        modal.setAttribute('aria-hidden', 'false');
-                        // focar primeiro elemento do modal
-                        const focusable = modalPanel.querySelectorAll(firstFocusableSelector);
-                        if (focusable.length) focusable[0].focus();
-                        // adicionar listeners
-                        document.addEventListener('keydown', onKeyDown);
-                        backdrop.addEventListener('click', hideModal);
-                    }
-
-                    function hideModal() {
-                        // animação de fechamento
-                        modalPanel.classList.remove('scale-100', 'opacity-100');
-                        modalPanel.classList.add('scale-95', 'opacity-0');
-                        modal.setAttribute('aria-hidden', 'true');
-
-                        // depois da animação (200ms), esconder de fato
-                        setTimeout(() => {
-                        modal.classList.add('hidden');
-                        document.body.style.overflow = '';
-                        if (lastFocused) lastFocused.focus();
-                        }, 180);
-
-                        // remover listeners
-                        document.removeEventListener('keydown', onKeyDown);
-                        backdrop.removeEventListener('click', hideModal);
-                    }
-
-                    function onKeyDown(e) {
-                        if (e.key === 'Escape') {
-                        hideModal();
-                        } else if (e.key === 'Tab') {
-                        // simples foco-trap
-                        const focusable = Array.from(modalPanel.querySelectorAll(firstFocusableSelector)).filter(el => !el.disabled);
-                        if (focusable.length === 0) {
-                            e.preventDefault();
-                            return;
-                        }
-                        const first = focusable[0];
-                        const last = focusable[focusable.length - 1];
-                        if (!e.shiftKey && document.activeElement === last) {
-                            e.preventDefault();
-                            first.focus();
-                        } else if (e.shiftKey && document.activeElement === first) {
-                            e.preventDefault();
-                            last.focus();
-                        }
-                        }
-                    }
-
-                   
-
-                    // eventos
-                    openBtn.addEventListener('click', showModal);
-                    cancelBtn.addEventListener('click', hideModal);
-
-                    // exemplo de submit (prevenir reload e fechar)
-                    document.getElementById('addOrderForm').addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        // aqui você enviaria via fetch/AJAX ou faria lógica
-                        alert('Salvo (exemplo). Fecha o modal.');
-                        hideModal();
-                    });
-                })();
-            </script>
-
-
+            <script src="<c:url value='/js/orders.js'/>"></script>
         </body>
 
         </html>
