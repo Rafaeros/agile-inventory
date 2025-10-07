@@ -1,6 +1,7 @@
 package br.agile.inventory.agileinventory.model;
 
-import java.util.Date;
+
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,8 +20,8 @@ public class Material {
     private String description;
     private double quantity;
 
-    private Date createdAt = new Date();
-    private Date updatedAt = new Date();
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
     @ManyToOne
     private ProductionOrder productOrder; // referência ao produto
@@ -57,19 +58,19 @@ public class Material {
         this.quantity = quantity;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -80,6 +81,5 @@ public class Material {
     public void setProductOrder(ProductionOrder productOrder) {
         this.productOrder = productOrder;
     }
-
 
 }
