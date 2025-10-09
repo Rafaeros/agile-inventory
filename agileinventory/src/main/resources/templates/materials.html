@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" th:href="@{/img/favicon.ico}">
+  <link th:href="@{/css/main.css}" rel="stylesheet">
+  <title>Materiais</title>
+</head>
+
+<body class="bg-gray-100 h-20 text-5xl fixed top-0 inset-x-0 text-center">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md p-10 flex relative items-center">
+    <a th:href="@{/}" class="absolute left-10 top-1/2 transform -translate-y-1/2">
+      <img th:src="@{/img/back.png}" alt="Voltar" class="h-8 w-8 hover:scale-110 transition-transform duration-300">
+    </a>
+    <div class="logo mx-auto flex justify-center items-center">
+      <img th:src="@{/img/logo.png}" alt="Logo" class="h-18 w-25 mr-4">
+      <h1 class="text-2xl text-purple-600">Materiais</h1>
+    </div>
+  </nav>
+
+  <div class="main-content flex flex-col items-center justify-start min-h-screen">
+    <div class="flex flex-col items-center justify-start mt-10 w-full gap-5">
+
+      <ul th:if="${materials != null}" class="w-screen flex flex-col items-center gap-5 px-10">
+        <li th:each="material : ${materials}" th:id="'material-' + ${material.id}"
+          class="w-full bg-white p-5 rounded shadow-md hover:shadow-lg transition-shadow duration-300 flex justify-between items-center">
+          <div class="flex flex-row items-center justify-between gap-10 w-full">
+            <span class="font-bold text-3xl" th:text="${material.code}"></span>
+            <span class="font-bold text-3xl" th:text="${material.description}"></span>
+            </span>
+          </div>
+        </li>
+      </ul>
+
+      <p th:if="${message != null}" class="text-xl" th:text="${message}"></p>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,6 +1,5 @@
 package br.agile.inventory.agileinventory.model;
 
-
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -11,9 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table  (name = "materials")
-public class Material {
-
+@Table(name = "products")
+public class Product {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,21 +22,22 @@ public class Material {
 
     @Column(nullable = false)
     private String description;
-    
+
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    public Material() {}
+    public Product() {}
 
-    public Material(String code, String description) {
+    public Product(String code, String description) {
         this.code = code;
         this.description = description;
     }
 
-    public Long getId() {
+    
+    public long getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
     public String getCode() {
@@ -64,4 +64,5 @@ public class Material {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 }
