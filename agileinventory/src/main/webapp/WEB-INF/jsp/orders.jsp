@@ -21,7 +21,7 @@
                     </a>
                     <div class="logo mx-auto">
                         <a href="<c:url value='/'/>" class="href flex justify-center items-center">
-                            <img src="<c:url value='/img/logo.png'/>" alt="Logo" class="h-12 w-12 mr-4">
+                            <img src="<c:url value='/img/logo.png'/>" alt="Logo" class="h-18 w-25 mr-4">
                             <h1 class="text-2xl text-purple-400">Materiais da Ordem De Produção</h1>
                         </a>
                     </div>
