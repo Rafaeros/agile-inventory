@@ -1,6 +1,9 @@
 package br.agile.inventory.agileinventory.model;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Id;
@@ -28,6 +31,7 @@ public class ProductionOrder {
     private int quantity;
 
     @OneToMany(mappedBy = "productOrder", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Material> materials;
 
     private LocalDateTime createdAt = LocalDateTime.now();

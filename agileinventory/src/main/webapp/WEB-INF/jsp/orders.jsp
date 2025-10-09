@@ -22,19 +22,19 @@
                     <div class="logo mx-auto">
                         <a href="<c:url value='/'/>" class="href flex justify-center items-center">
                             <img src="<c:url value='/img/logo.png'/>" alt="Logo" class="h-12 w-12 mr-4">
-                            <h1 class="text-2xl text-blue-400">Materiais da Ordem De Produção</h1>
+                            <h1 class="text-2xl text-purple-400">Materiais da Ordem De Produção</h1>
                         </a>
                     </div>
                 </nav>
             </div>
 
             <!-- Main Content -->
-            <div class="main-content flex flex-col items-center justify-start w-full min-h-screen">
+            <div class="main-content flex flex-col items-center justify-start w-full min-h-screen overflow-y-auto">
                 <!-- Main Content Header-->
                 <div class="flex flex-row items-center justify-evenly mt-10 gap-5">
                     <h2 class="text-3xl font-bold">Lista de Ordem de Produção</h2>
                     <a href="#"
-                        class="flex flex-row items-center justify-center gap-3 bg-blue-500 hover:bg-blue-700 text-white font-bold text-3xl px-4 py-2 rounded"><img
+                        class="flex flex-row items-center justify-center gap-3 bg-purple-500 hover:bg-purple-700 text-white font-bold text-3xl px-4 py-2 rounded"><img
                             src="<c:url value='/img/plus.png'/>" class="h-6 w-6" alt="+"><button
                             id="openModalBtn">Adicionar</button></a>
                 </div>
@@ -43,7 +43,7 @@
                 <div class="flex flex-col items-center justify-start mt-10 w-full gap-5">
                     <c:if test="${not empty orders}">
                         <!-- UL principal agora ocupa toda a largura -->
-                        <ul class="w-screen flex flex-col items-center gap-5 px-10">
+                        <ul class="w-full max-h-[70vh] overflow-y-auto flex flex-col items-center gap-5 px-10">
                             <c:forEach var="order" items="${orders}">
 
                                 <!-- Linha principal da OP -->
@@ -108,7 +108,7 @@
                                     class="w-6/12 h-10 border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
                                     placeholder="ID da Ordem de Produção" />
                                 <button id="searchBtn"
-                                    class="flex items-center justify-center p-3 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition-colors cursor-pointer">
+                                    class="flex items-center justify-center p-3 bg-purple-600 text-white font-bold rounded-md hover:bg-purple-700 transition-colors cursor-pointer">
                                     <img src="<c:url value='/img/search.png'/>" alt="Procurar" class="h-6 w-6">
                                 </button>
                             </form>
@@ -124,7 +124,7 @@
                             <form id="scraping-form" class="flex flex-col items-center justify-start mt-10 w-full h-full gap-5">
                                 <!-- Container dos materiais -->
                                 <div id="materials-container"></div>
-                                <button id="submit-order-btn" class="w-7/12 bg-blue-600 text-white py-2 m-5 font-bold rounded-md hover:bg-blue-700 transition-colors"
+                                <button id="submit-order-btn" class="w-7/12 bg-purple-600 text-white py-2 m-5 font-bold rounded-md hover:bg-purple-700 transition-colors"
                                     type="submit">Salvar
                                 </button>
                             </form>

@@ -16,7 +16,7 @@
       <div class="navbar">
         <nav class="bg-white shadow-md p-10 flex justify-center items-center">
           <img src="<c:url value='/img/logo.png'/>" alt="Logo" class="h-12 w-12 mr-4">
-          <h1 class="text-2xl text-blue-400">Agile Inventory</h1>
+          <h1 class="text-2xl text-purple-600">Agile Inventory</h1>
         </nav>
       </div>
 
@@ -25,9 +25,9 @@
         <p class="text-lg text-gray-600 mb-8">Sua solução completa para gerenciamento de estoque.</p>
         <div class="flex flex-row gap-10 items-center justify-center">
           <a href="<c:url value='/materials'/>"
-            class="bg-blue-500 text-white w-100 h-50 font-regular flex items-center justify-center rounded-lg hover:bg-blue-600 transition duration-300">Ver Materiais </a>
+            class="bg-purple-500 text-white w-100 h-50 font-regular flex items-center justify-center rounded-lg hover:bg-purple-600 transition duration-300">Ver Materiais </a>
           <a href="<c:url value='/orders'/>"
-          class="bg-blue-500 text-white w-100 h-50 font-regular flex items-center justify-center rounded-lg hover:bg-blue-600 transition duration-300">Ver Ordens de Produção </a>
+          class="bg-purple-500 text-white w-100 h-50 font-regular flex items-center justify-center rounded-lg hover:bg-purple-600 transition duration-300">Ver Ordens de Produção </a>
         </div>
       </div>
 

@@ -3,6 +3,8 @@ package br.agile.inventory.agileinventory.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,6 +26,7 @@ public class Material {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @ManyToOne
+    @JsonBackReference
     private ProductionOrder productOrder; // referência ao produto
 
     public Long getId() {

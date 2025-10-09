@@ -244,6 +244,8 @@ async function addOrder() {
         const result = await response.json();
         console.log('Resposta do servidor:', result);
         alert('Ordem de Produção e Materiais salva com sucesso!');
+        hideModal()
+        location.reload();
     } catch (error) {
         console.error('Erro:', error);
         alert('Erro ao salvar a Ordem de Produção e Materiais.');
@@ -263,7 +265,6 @@ openBtn.addEventListener('click', function(e) {
 
     
 openBtn.addEventListener('click', showModal);
-cancelBtn.addEventListener('click', hideModal);
 
 
 const scrapingForm = document.getElementById('scraping-form');
