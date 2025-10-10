@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="pt-br" xlmns:th="http://www.thymeleaf.org">
+<body>
+    <nav th:fragment="header" class="bg-white shadow-md p-10 flex relative items-center">
+    <a th:href="@{/}" class="absolute left-10 top-1/2 transform -translate-y-1/2">
+        <img th:src="@{/img/back.png}" alt="Voltar" class="h-8 w-8 hover:scale-110 transition-transform duration-300">
+    </a>
+    <div class="logo mx-auto flex justify-center items-center">
+        <img th:src="@{/img/logo.png}" alt="Logo" class="h-18 w-25 mr-4">
+        <h1 class="text-2xl text-purple-600">Agile Inventory</h1>
+    </div>
+    </nav>
+</body>
+</html>
