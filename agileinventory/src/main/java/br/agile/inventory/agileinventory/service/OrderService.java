@@ -29,6 +29,10 @@ public class OrderService {
         return orderRepository.findFirst20By();
     }
 
+    public Optional<Order> findByOrderId(Long orderId) {
+        return orderRepository.findByOrderId(orderId);
+    }
+
     @Transactional
     public Order createOrder(OrderRequest request) {
         Optional<Order> order = orderRepository.findByOrderId(request.getOrderId());
