@@ -2,11 +2,12 @@ package br.agile.inventory.agileinventory.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import br.agile.inventory.agileinventory.repository.OrderRepository;
+import br.agile.inventory.agileinventory.util.OrderMapper;
 import jakarta.transaction.Transactional;
-
 import br.agile.inventory.agileinventory.dto.OrderMaterialRequest;
 import br.agile.inventory.agileinventory.dto.OrderRequest;
 import br.agile.inventory.agileinventory.model.Order;
@@ -31,6 +32,13 @@ public class OrderService {
 
     public Optional<Order> findByOrderId(Long orderId) {
         return orderRepository.findByOrderId(orderId);
+    }
+    
+    public List<OrderRequest> getAllOrdersForExport() {
+        List<Order> orders = orderRepository.findAllWithDetails();
+        return orders.stream()
+                .map(OrderMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional

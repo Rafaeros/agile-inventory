@@ -9,26 +9,25 @@
   <title>Produtos</title>
 </head>
 
-<body class="bg-gray-100 h-20 text-5xl fixed top-0 inset-x-0 text-center">
-  <!-- Navbar -->
+<body class="bg-gray-100 h-full text-center">
+
+  <!-- HEADER -->
   <div th:insert="~{fragments/header :: header}"></div>
 
+  <div class="main-content flex flex-col items-center justify-start min-h-screen pt-20 px-4 sm:px-10">
+    <div class="flex flex-col items-center justify-start mt-5 w-full gap-5">
 
-  <div class="main-content flex flex-col items-center justify-start min-h-screen">
-    <div class="flex flex-col items-center justify-start mt-10 w-full gap-5">
-
-      <ul th:if="${products != null}" class="w-screen flex flex-col items-center gap-5 px-10">
+      <ul th:if="${products != null}" class="w-full flex flex-col items-center gap-5">
         <li th:each="product : ${products}" th:id="'material-' + ${product.id}"
-          class="w-full bg-white p-5 rounded shadow-md hover:shadow-lg transition-shadow duration-300 flex justify-between items-center">
-          <div class="flex flex-row items-center justify-between gap-10 w-full">
-            <span class="font-bold text-3xl" th:text="${product.code}"></span>
-            <span class="font-bold text-3xl" th:text="${product.description}"></span>
-            </span>
-          </div>
+            class="w-full sm:w-11/12 bg-white p-4 sm:p-5 rounded shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-10">
+
+          <span class="font-bold text-xl sm:text-3xl break-words" th:text="${product.code}"></span>
+          <span class="font-bold text-lg sm:text-3xl break-words" th:text="${product.description}"></span>
+
         </li>
       </ul>
 
-      <p th:if="${message != null}" class="text-xl" th:text="${message}"></p>
+      <p th:if="${message != null}" class="text-base sm:text-xl text-gray-700 mt-4" th:text="${message}"></p>
     </div>
   </div>
 </body>

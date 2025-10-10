@@ -1,7 +1,11 @@
 package br.agile.inventory.agileinventory.controller;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import br.agile.inventory.agileinventory.dto.OrderRequest;
 import br.agile.inventory.agileinventory.model.Order;
 import br.agile.inventory.agileinventory.service.OrderService;
+import br.agile.inventory.agileinventory.util.export.OrderExcelReporter;
 
 @Controller
 @RequestMapping("/orders")
@@ -89,6 +96,19 @@ public class OrderController {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/orders";
+    }
+
+    @GetMapping("/export/excel")
+    public ResponseEntity<byte[]> exportOrdersToExcel() throws IOException {
+        List<OrderRequest> orders = orderService.getAllOrdersForExport();
+        byte[] excelFile = OrderExcelReporter.exportOrders(orders);
+
+        String fileName = "ordens_producao_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd_MM_yyyy")) + ".xlsx";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(excelFile);
     }
 
 }

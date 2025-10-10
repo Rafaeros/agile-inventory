@@ -15,6 +15,7 @@
     <!-- Navbar -->
     <div th:insert="~{fragments/header :: header}"></div>
 
+    <!-- Alertas -->
     <div th:if="${warning != null}" class="bg-red-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
         <span th:text="${warning}"></span>
     </div>
@@ -22,68 +23,74 @@
     <div th:if="${error != null}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
         <span th:text="${error}"></span>
     </div>
-    
+
     <div th:if="${success != null}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
         <span th:text="${success}"></span>
     </div>
 
     <!-- Conteúdo Principal -->
-    <div class="flex flex-col items-center justify-start mt-10 w-full gap-5">
+    <div class="flex flex-col items-center justify-start mt-10 w-full gap-5 px-2 sm:px-10">
 
-        <div class="header w-full px-15 flex items-center justify-start gap-10 mb-5">
+        <div class="header w-full flex flex-col sm:flex-row items-center sm:justify-start gap-3 sm:gap-10 mb-5">
             <h3 class="text-2xl font-bold">Ordem de Produção</h3>
-            <button id="add-order-btn" onclick="openModal()"
-                class="bg-purple-500 text-white w-50 h-20 font-bold text-2xl flex items-center justify-center rounded-lg hover:bg-purple-600 transition duration-300">Adicionar</button>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-5 w-full sm:w-auto">
+                <button id="add-order-btn" onclick="openModal()"
+                    class="bg-purple-500 text-white w-full sm:w-50 h-14 sm:h-20 font-bold text-lg sm:text-2xl flex items-center justify-center rounded-lg hover:bg-purple-600 transition duration-300">
+                    Adicionar
+                </button>
+                <a th:href="@{/orders/export/excel}" target="__blank"
+                    class="bg-purple-500 text-white w-full sm:w-50 h-14 sm:h-20 font-bold text-lg sm:text-2xl flex items-center justify-center rounded-lg hover:bg-purple-600 transition duration-300">
+                    Exportar
+                </a>
+            </div>
         </div>
 
-        <p th:if="${message != null}" class="text-xl" th:text="${message}"></p>
-        
-        <ul th:if="${orders != null}" class="w-full max-h-[70vh] overflow-y-auto flex flex-col items-center gap-5 px-10">
+        <p th:if="${message != null}" class="text-base sm:text-xl" th:text="${message}"></p>
+
+        <ul th:if="${orders != null}" class="w-full max-h-[70vh] overflow-y-auto flex flex-col items-center gap-5 px-2 sm:px-10">
             <!-- Loop de Ordens -->
             <li th:each="order : ${orders}" th:id="'order-' + ${order.id}"
-                class="w-full bg-white p-5 rounded shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col gap-3">
+                class="w-full bg-white p-4 sm:p-5 rounded shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col gap-3">
 
-                <!-- Cabeçalho da Ordem -->
-                <div class="flex flex-row items-center justify-between w-full">
-                    <div class="flex flex-row items-center justify-between w-full gap-10">
-                        <span class="font-bold text-3xl" th:text="${order.orderNumber}"></span>
-                        <span class="font-bold text-3xl" th:text="${order.product?.code}"></span>
-                        <span class="font-bold text-3xl">Quantidade:
-                            <span th:text="${order.quantity}"></span> PÇS
+                <!-- Order Header -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-2 sm:gap-10">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-2 sm:gap-10">
+                        <span class="font-bold text-xl sm:text-3xl" th:text="${order.orderNumber}"></span>
+                        <span class="font-bold text-xl sm:text-3xl" th:text="${order.product?.code}"></span>
+                        <span class="font-bold text-xl sm:text-3xl">
+                            Quantidade: <span th:text="${order.quantity}"></span> PÇS
                         </span>
                     </div>
-                   <button 
-                        class="ml-4 cursor-pointer transform transition-transform duration-300" 
+                    <button 
+                        class="mt-2 sm:mt-0 ml-0 sm:ml-4 cursor-pointer transform transition-transform duration-300" 
                         th:attr="data-dropdown='drop-' + ${order.id}">
-                        <img 
-                        th:src="@{/img/down-arrow.png}" 
-                        alt="Mostrar"
-                        class="h-8 w-8 transition-transform duration-300">
+                        <img th:src="@{/img/down-arrow.png}" alt="Mostrar"
+                            class="h-6 sm:h-8 w-6 sm:w-8 transition-transform duration-300">
                     </button>
                 </div>
 
-                <!-- Dropdown da Tabela de Materiais -->
-                <div th:id="'drop-' + ${order.id}"
-                    class="hidden w-full bg-gray-50 p-5 rounded-lg shadow-inner transition-all duration-300">
-                    <h3 class="text-center text-xl font-bold text-gray-700 mb-3"
+                <!-- Dropdown for Materials -->
+                <div th:id="'drop-' + ${order.id}" class="hidden w-full bg-gray-50 p-4 sm:p-5 rounded-lg shadow-inner transition-all duration-300 overflow-x-auto">
+                    <h3 class="text-center text-lg sm:text-xl font-bold text-gray-700 mb-3"
                         th:text="'Materiais da Ordem #' + ${order.orderNumber}">
                     </h3>
 
-                    <table class="w-full border-collapse rounded-lg  shadow-sm">
-                        <thead class="bg-purple-100 text-gray-700 border-b-2">
+                    <table class="w-full min-w-[500px] sm:min-w-full border-collapse rounded-lg shadow-sm text-sm sm:text-base">
+                        <thead class="bg-purple-100 text-gray-700 border-b-2 text-xs sm:text-sm">
                             <tr>
-                                <th class="p-3 align-middle font-semibold">Código</th>
-                                <th class="p-3 align-middle font-semibold">Descrição</th>
-                                <th class="p-3 align-middle font-semibold">Quantidade</th>
+                                <th class="p-2 sm:p-3 align-middle font-semibold">Código</th>
+                                <th class="p-2 sm:p-3 align-middle font-semibold">Descrição</th>
+                                <th class="p-2 sm:p-3 align-middle font-semibold">Quantidade</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="material : ${order.materials}"
                                 class="bg-white border-b hover:bg-gray-50 transition">
-                                <td class="p-3 font-bold text-gray-800 text-lg" th:text="${material?.material?.code}"></td>
-                                <td class="p-3 text-gray-600 text-lg" th:text="${material?.material?.description}"></td>
-                                <td class="p-3 text-gray-600 text-lg text-right"
-                                    th:text="${material?.quantity != null ? 'Quantidade: ' + #numbers.formatDecimal(material.quantity, 2, 2) + ' UND.' : 'Quantidade 0 UND.'}">
+                                <td class="p-2 sm:p-3 font-bold text-gray-800" th:text="${material?.material?.code}"></td>
+                                <td class="p-2 sm:p-3 text-gray-600" th:text="${material?.material?.description}"></td>
+                                <td class="p-2 sm:p-3 text-gray-600 text-right"
+                                    th:text="${material?.quantity != null ? #numbers.formatDecimal(material.quantity, 2, 2) + ' UND.' : '0 UND.'}">
                                 </td>
                             </tr>
                         </tbody>
@@ -98,30 +105,28 @@
         aria-hidden="true" aria-labelledby="modal-title" role="dialog">
         <div id="backdrop" class="absolute h-full w-full inset-0 bg-black/60 transition-opacity"></div>
 
-        <div class="fixed inset-0 flex justify-center items-center h-80 mt-20 w-full p-4">
-            <div id="modal-panel" class="bg-white rounded-2xl h-full w-3/4 shadow-xl mx-auto transform transition-all"
+        <div class="fixed inset-0 flex justify-center items-start sm:items-center h-full sm:h-auto mt-10 sm:mt-20 w-full p-2 sm:p-4">
+            <div id="modal-panel" class="bg-white rounded-2xl w-full sm:w-3/4 h-full sm:h-80 shadow-xl mx-auto transform transition-all"
                 role="document" tabindex="-1">
 
                 <!--Header-->
-                <div class="p-6 border-b flex flex-row items-center justify-between">
-
-                    <h2 id="modal-title" class="text-lg font-semibold text-gray-800">Adicionar Ordem de Produção</h2>
-
+                <div class="p-4 sm:p-6 border-b flex flex-row items-center justify-between">
+                    <h2 id="modal-title" class="text-lg sm:text-xl font-semibold text-gray-800">Adicionar Ordem de Produção</h2>
                     <button id="close-modal" type="button" onclick="closeModal()" class="cursor-pointer">
-                        <img th:src="@{/img/close.png}" alt="Fechar" class="h-6 w-6">
+                        <img th:src="@{/img/close.png}" alt="Fechar" class="h-5 sm:h-6 w-5 sm:w-6">
                     </button>
                 </div>
 
-                <!-- Form de busca -->
-                <div id="search-section">
+                <!-- Forms -->
+                <div id="search-section" class="px-2 sm:px-4">
                     <form th:action="@{/orders/search}" method="get"
-                        class="flex flex-row items-center justify-center m-2 w-full  gap-5" id="search-form">
+                        class="flex flex-col sm:flex-row items-center justify-center m-2 w-full gap-3 sm:gap-5" id="search-form">
                         <input name="orderId" type="number" id="searchInput"
-                            class="w-6/12 h-10 border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+                            class="w-full sm:w-6/12 h-10 border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
                             placeholder="ID da Ordem de Produção" />
                         <button id="searchBtn"
                             class="flex items-center justify-center p-3 bg-purple-600 text-white font-bold rounded-md hover:bg-purple-700 transition-colors cursor-pointer">
-                            <img th:src="@{/img/search.png}" alt="Procurar" class="h-6 w-6">
+                            <img th:src="@{/img/search.png}" alt="Procurar" class="h-5 sm:h-6 w-5 sm:w-6">
                         </button>
                     </form>
                 </div>

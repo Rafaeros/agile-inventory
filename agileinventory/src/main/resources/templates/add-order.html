@@ -9,62 +9,78 @@
     <title>Adicionando Ordem</title>
 </head>
 
-<body class="bg-gray-100 text-5xl fixed top-0 inset-x-0 text-center bg-slate-300/50">
-
+<body class="bg-gray-100 text-5xl">
 
     <!-- Header -->
-    <div class="header relative w-full bg-white p-5 shadow-md border-b border-gray-500 flex items-center gap-10">
-        <a class="absolute left-5  text-2xl font-bold text-purple-700 hover:text-purple-500 transition duration-300 cursor-pointer"
-            th:href="@{/orders}">Voltar</a>
-        <h2 class="font-bold text-2xl mx-auto">Adicionando Ordem de Produção</h2>
+    <div class="header relative w-full bg-white p-2 sm:p-4 shadow-md border-b border-gray-500 flex items-center">
+        <a class="absolute left-2 sm:left-5 text-sm sm:text-lg font-bold text-purple-700 hover:text-purple-500 transition duration-300 cursor-pointer"
+        th:href="@{/orders}">Voltar</a>
+        <h2 class="font-semibold text-base sm:text-xl mx-auto text-center">Adicionando Ordem de Produção</h2>
     </div>
 
-
     <!-- Main Content -->
-    <div class="main-content flex flex-col items-center justify-start mt-10 w-full gap-5">
-        <!-- Order Form -->
+    <div class="main-content flex flex-col items-center justify-start mt-5 sm:mt-10 w-full gap-5 px-2 sm:px-10">
+
+        <!-- Order Info -->
         <div
-            class="w-[90vw] h-full flex flex-col justify-center items-center gap-10 p-10 m-5 border-2 border-gray-100 shadow-sm">
-            <div
-                class="order-info flex flex-row items-center justify-between gap-10 w-[90vw] shadow-lg p-10 rounded-sm">
-                <h3 class="text-2xl font-bold" th:text="${order.orderNumber}"></h3>
-                <h3 class="text-2xl font-bold" th:text="${'Produto: ' + order.code}"></h3>
-                <h3 class="text-2xl font-bold" th:text="${'Quantidade: ' + order.quantity + ' PÇS'}"></h3>
-            </div>
+            class="order-info flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-10 w-full bg-white shadow-lg p-4 sm:p-10 rounded">
+            <h3 class="text-lg sm:text-2xl font-bold" th:text="${order.orderNumber}"></h3>
+            <h3 class="text-lg sm:text-2xl font-bold" th:text="${'Produto: ' + order.code}"></h3>
+            <h3 class="text-lg sm:text-2xl font-bold" th:text="${'Quantidade: ' + order.quantity + ' PÇS'}"></h3>
+        </div>
 
-            <div class="materials-form w-[85vw] flex items-center justify-center border-2 border-gray-100 shadow-sm">
-                <form th:action="@{/orders}" method="post" th:object="${order}"
-                    class="flex flex-col justify-center items-center gap-4 w-[85vw]">
-                    <input type="hidden" th:field="*{orderId}">
-                    <input type="hidden" th:field="*{orderNumber}">
-                    <input type="hidden" th:field="*{code}">
-                    <input type="hidden" th:field="*{description}">
-                    <input type="hidden" th:field="*{quantity}">
+        <div class="flex flex-col sm:flex-row items-center justify-center mb-2 p-2 sm:p-5 gap-2 w-full">
+            <h2 class="text-lg sm:text-2xl font-semibold sm:font-bold text-center">
+                Materiais da Ordem de Produção
+            </h2>
+        </div>
 
-                    <div class="flex flex-row items-center justify-start mb-2 p-5 font-semibold text-gray-700 w-[85vw]">
-                        <label class="text-left w-2/6">Cód.</label>
-                        <label class="text-left w-3/6">Descrição</label>
-                        <label class="text-left w-1/6">Qtd.</label>
+        <!-- Materials Form -->
+        <div
+            class="materials-form w-full sm:w-[85vw] flex flex-col items-center justify-center border-2 border-gray-100 shadow-sm rounded">
+            
+            <form th:action="@{/orders}" method="post" th:object="${order}"
+                class="flex flex-col justify-center items-center gap-4 w-full px-2 sm:px-5 py-4">
+
+                <input type="hidden" th:field="*{orderId}">
+                <input type="hidden" th:field="*{orderNumber}">
+                <input type="hidden" th:field="*{code}">
+                <input type="hidden" th:field="*{description}">
+                <input type="hidden" th:field="*{quantity}">
+
+                <!-- Materiais -->
+                <div th:each="material, iterStat : *{materials}"
+                    class="flex flex-col sm:flex-row gap-4 mb-2 w-full border-b border-gray-300 p-2 sm:p-5 rounded">
+
+                    <div class="flex flex-col sm:flex-row w-full gap-2 bg-white rounded-md shadow-md p-8 sm:p-2">
+                        <div class="flex flex-col w-full sm:w-2/6">
+                            <label class="text-sm font-semibold mb-1 sm:mb-0">Cód.</label>
+                            <input
+                                class="input w-full outline-none outline-2 sm:outline-1 focus:outline-purple-600 shadow-sm text-sm sm:text-3xl"
+                                type="text" th:field="*{materials[__${iterStat.index}__].code}" readonly />
+                        </div>
+                        <div class="flex flex-col w-full sm:w-3/6">
+                            <label class="text-sm font-semibold mb-1 sm:mb-0">Descrição</label>
+                            <input
+                                class="input w-full outline-none outline-2 sm:outline-1 focus:outline-purple-600 shadow-sm text-sm sm:text-base"
+                                type="text" th:field="*{materials[__${iterStat.index}__].description}" readonly />
+                        </div>
+                        <div class="flex flex-col w-full sm:w-1/6">
+                            <label class="text-sm font-semibold mb-1 sm:mb-0 text-center">Qtd.</label>
+                            <input
+                                class="input w-full outline-2 focus:outline-purple-700 shadow-sm text-sm sm:text-md text-center"
+                                type="number" th:field="*{materials[__${iterStat.index}__].quantity}" />
+                        </div>
                     </div>
 
-                    <div th:each="material, iterStat : *{materials}"
-                        class="flex flex-row gap-2 mb-2 overflow-y-auto shadow-lg border-b border-gray-500 rounded-md p-5 m-5 w-[85vw]">
-                        <input
-                            class="input w-2/6 outline-none outline:focus:ring-2 focus:ring-purple-400 shadow-sm text-3xl"
-                            type="text" th:field="*{materials[__${iterStat.index}__].code}" readonly />
-                        <input
-                            class="input w-3/6  outline-none outline:focus:ring-2 focus:ring-purple-400 shadow-sm text-sm"
-                            type="text" th:field="*{materials[__${iterStat.index}__].description}" readonly />
-                        <input
-                            class="input w-1/6 outline-purple-400 outline:focus:ring-2 focus:ring-purple-700 shadow-sm text-md text-center"
-                            type="number" th:field="*{materials[__${iterStat.index}__].quantity}" />
-                    </div>
+                </div>
 
-                    <button type="submit"
-                        class="bg-purple-500 text-white w-80 h-20 font-2xl flex items-center justify-center rounded-lg hover:bg-purple-600 transition duration-300">Cadastrar</button>
-                </form>
-            </div>
-
+                <!-- Submit Button -->
+                <button type="submit"
+                    class="bg-purple-500 text-white w-full sm:w-80 h-12 sm:h-20 font-semibold flex items-center justify-center rounded-lg hover:bg-purple-600 transition duration-300 mt-4">
+                    Cadastrar
+                </button>
+            </form>
         </div>
     </div>
 </body>

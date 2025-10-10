@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import br.agile.inventory.agileinventory.model.Order;
 
@@ -12,4 +13,9 @@ import br.agile.inventory.agileinventory.model.Order;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findByOrderId(Long orderId);
     List<Order> findFirst20By();
+
+    @Query("SELECT DISTINCT o FROM Order o " +
+           "LEFT JOIN FETCH o.product " +
+           "LEFT JOIN FETCH o.materials m")
+    List<Order> findAllWithDetails();
 }
