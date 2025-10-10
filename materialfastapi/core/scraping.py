@@ -86,16 +86,17 @@ class Scraping(requests.Session):
             soup = BeautifulSoup(response.text, "html.parser")
             # Get production order number
             element = soup.find("input", {"id": "txtCodigoPrincipal"})
-            product_order = str(element["value"]) if element else None  # type: ignore
-            if not product_order:
+            order_number = str(element["value"]) if element else None  # type: ignore
+            if not order_number:
                 return {"error": "Failed to fetch production order number"}
             
             # Get production material code
-            product_material = soup.find("input", {"id": "material"})
-            product_material = str(product_material["value"]) if product_material else ""  # type: ignore
-            if not product_material:
+            product_parts = soup.find("input", {"id": "material"})
+            product_parts = str(product_parts["value"]) if product_parts else ""  # type: ignore
+            if not product_parts:
                 return {"error": "Failed to fetch production material"}
-            product_material = product_material.split("-")[0].strip()
+            product_code = product_parts.split("-", 1)[0].strip()  
+            product_description = product_parts.split("-", 1)[1].strip()
 
             # Getting all materials from production order
             all_tables = pd.read_html(StringIO(response.text))
@@ -110,12 +111,24 @@ class Scraping(requests.Session):
                 f"Insumos para a OS: {code}" for code in os_codes
             ]
 
+            # Remove strings that are not in mp_df strings
             for string_input in string_inputs:
                 found = any(row["Código"].startswith(string_input) for _, row in mp_df.iterrows())
                 if not found:
                     string_inputs.remove(string_input)
                 if found:
                     print(f"Found section for: {string_input}")
+
+
+            MaterialList.instances[order_number] = {
+                "orderId": int(order_id),
+                "orderNumber": order_number,
+                "code": product_code,
+                "description": product_description,
+                "quantity": product_quantity,
+                "materials": []
+            }
+
             for string_input in string_inputs:
                 start_index = mp_df.index[
                     mp_df["Código"].str.startswith(string_input)
@@ -127,16 +140,16 @@ class Scraping(requests.Session):
                     if row["Código"].startswith("Insumos"):
                         break
 
-                    code: str = row["Código"]
-                    description: str = row["Nome"]
-                    parts = row["Quantidade"].split(" ")
-                    quantity = float(parts[0].replace(",", "."))
-                    unit = parts[1].lower() if len(parts) > 1 else ""
+                    material_code: str = row["Código"]
+                    material_description: str = row["Nome"]
 
-                    print(f"Code: {code}, Description: {description}, Quantity: {quantity}, Unit: {unit}")
+                    parts = row["Quantidade"].split(" ")
+                    material_quantity = float(parts[0].replace(",", "."))
+                    material_unit = parts[1].lower() if len(parts) > 1 else ""
 
                     code_exclusion_list: list[str] = [
                         "ETQBP",
+                        "SCPL",
                         "TBRET",
                         "TMOES",
                         "TMF",
@@ -152,7 +165,6 @@ class Scraping(requests.Session):
                         "FITA",
                         "RETRATIL",
                         "ETIQUETA",
-                        "SCPL",
                     ]
                     unit_exclusion_list: list[str] = [
                         "mt",
@@ -165,30 +177,26 @@ class Scraping(requests.Session):
                     ]
 
                     if any(
-                        excl in code.upper()
+                        material_code.upper().startswith(excl)
                         for excl in code_exclusion_list
                     ):
                         continue
 
                     if any(
-                        excl in description.upper()
+                        excl in material_description.upper()
                         for excl in description_exclusion_list
                     ):
                         continue
 
-                    if unit in unit_exclusion_list:
+                    if material_unit in unit_exclusion_list:
                         continue
 
                     # Factory method to create Material instances
-                    MaterialList.create(
-                        product_order,
-                        product_material,
-                        product_quantity,
-                        code,
-                        description,
-                        quantity,
+                    MaterialList.instances[order_number]["materials"].append(
+                        {"code": material_code, "description": material_description, "quantity": material_quantity}
                     )
-            return MaterialList.get_instances()
+
+            return MaterialList.instances[order_number]
 
         except RequestException as e:
             print(f"Error fetching production order page: {e}")

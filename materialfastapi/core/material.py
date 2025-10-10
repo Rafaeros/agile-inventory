@@ -34,23 +34,28 @@ class MaterialList:
     @classmethod
     def create(
         cls,
-        product_order: str,
-        product_material: str,
+        order_id: int,
+        order_number: str,
+        product_code: str,
+        product_description: str,
         product_quantity: int,
-        code: str,
-        description: str,
-        quantity: float,
+        material_code: str,
+        material_description: str,
+        material_quantity: float,
     ) -> None:
         """Creates an instance of the class."""
 
-        instance = Material(code, description, quantity)
+        instance = Material(material_code, material_description, material_quantity)
 
-        if product_order not in cls.instances:
-            cls.instances[product_order] = {"materials": []}
+        if order_number not in cls.instances:
+            cls.instances[order_number] = {"materials": []}
 
-        cls.instances[product_order]["product_quantity"] = product_quantity
-        cls.instances[product_order]["product_material"] = product_material
-        cls.instances[product_order]["materials"].append(asdict(instance))
+        cls.instances[order_number]["orderId"] = order_id
+        cls.instances[order_number]["orderNumber"] = order_number
+        cls.instances[order_number]["code"] = product_code
+        cls.instances[order_number]["description"] = product_description
+        cls.instances[order_number]["quantity"] = product_quantity
+        cls.instances[order_number]["materials"].append(asdict(instance))
 
     @classmethod
     def get_instances(cls) -> dict[str, Any]:

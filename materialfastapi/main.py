@@ -42,6 +42,7 @@ async def get_material_data(order_id: str):
     MaterialList.clear_instances()
     data = await scraper.get_materials_of_production_order(order_id)
     if not data:
+        print("Failed to fetch material data, material is null")
         return {"error": "Failed to fetch material data"}
     return JSONResponse(
         content=data, status_code=200, headers={"Content-Type": "application/json"}
