@@ -26,7 +26,7 @@ public class OrderMaterial {
     @JoinColumn(name="order_id", nullable = false)
     private Order order;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

@@ -3,12 +3,20 @@ package br.agile.inventory.agileinventory.dto;
 import java.util.List;
 
 public class OrderRequest {
+    private Long id;
     private Long orderId;
     private String orderNumber;
     private String code;
     private String description;
     private int quantity;
     private List<OrderMaterialRequest> materials;
+
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
     
     public Long getOrderId() {
         return orderId;

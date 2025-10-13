@@ -1,6 +1,7 @@
 package br.agile.inventory.agileinventory.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -27,5 +28,9 @@ public class MaterialService {
 
     public List<Material> getFirst20Materials() {
         return materialRepository.findFirst20By();
+    }
+
+    public Optional<Material> findById(Long id) {
+        return materialRepository.findById(id);
     }
 }

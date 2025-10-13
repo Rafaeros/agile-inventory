@@ -63,6 +63,7 @@
                             Quantidade: <span th:text="${order.quantity}"></span> PÇS
                         </span>
                     </div>
+                    <a th:href="@{/orders/edit/{id}(id=${order.id})}" class="bg-purple-500 text-white w-full sm:w-50 h-14 sm:h-20 font-bold text-lg sm:text-2xl flex items-center justify-center rounded-lg hover:bg-purple-600 transition duration-300 cursor-pointer">Editar</a>
                     <button 
                         class="mt-2 sm:mt-0 ml-0 sm:ml-4 cursor-pointer transform transition-transform duration-300" 
                         th:attr="data-dropdown='drop-' + ${order.id}">

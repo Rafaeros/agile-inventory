@@ -12,6 +12,7 @@ public class OrderMapper {
 
     public static OrderRequest toDto(Order order) {
         OrderRequest dto = new OrderRequest();
+        dto.setId(order.getId());
         dto.setOrderId(order.getOrderId());
         dto.setOrderNumber(order.getOrderNumber());
         dto.setQuantity(order.getQuantity());
@@ -29,9 +30,11 @@ public class OrderMapper {
 
     private static OrderMaterialRequest toMaterialDto(OrderMaterial material) {
         OrderMaterialRequest dto = new OrderMaterialRequest();
+        dto.setId(material.getId());
         dto.setCode(material.getMaterial().getCode());
         dto.setDescription(material.getMaterial().getDescription());
         dto.setQuantity(material.getQuantity());
+        dto.setMaterialId(material.getMaterial().getId());
         return dto;
     }
 }

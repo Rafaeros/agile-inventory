@@ -41,8 +41,7 @@ public class OrderController {
         } else {
             model.addAttribute("orders", orders);
         }
-        
-
+    
         return "orders";
     }
 
@@ -94,6 +93,25 @@ public class OrderController {
             redirectAttributes.addFlashAttribute("success", "Ordem de Produção cadastrada com sucesso.");
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/orders";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editOrder(@PathVariable("id") Long id, Model model) {
+        OrderRequest order = orderService.findById(id);
+
+        model.addAttribute("order", order);
+        return "edit-order";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateOrder(@PathVariable("id") Long id, OrderRequest request, RedirectAttributes redirectAttributes) {
+        try {
+            orderService.updateOrder(id, request);
+            redirectAttributes.addFlashAttribute("success", "Ordem de Produção atualizada com sucesso.");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", "Erro ao atualizar Ordem de Produção: " + e.getMessage());
         }
         return "redirect:/orders";
     }

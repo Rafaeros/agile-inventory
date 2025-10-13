@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="shortcut icon" th:href="@{/img/favicon.ico}" />
+  <link th:href="@{/css/main.css}" rel="stylesheet" />
+  <title>Editando Ordem</title>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- Header -->
+  <header class="w-full bg-white p-4 shadow-md border-b border-gray-300 flex items-center justify-between">
+    <a th:href="@{/orders}" class="text-purple-700 font-semibold text-base hover:text-purple-500 transition">
+      ← Voltar
+    </a>
+    <h2 class="text-lg sm:text-2xl font-bold text-center flex-1">Editando Ordem de Produção</h2>
+    <div class="w-16"></div> <!-- espaço para balancear -->
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex flex-col items-center justify-start mt-6 px-3 sm:px-10 w-full">
+    <form th:action="@{/orders/update/{id}(id=${order.id})}" method="post" th:object="${order}"
+      class="bg-white rounded-2xl shadow-lg w-full max-w-5xl flex flex-col gap-6 p-5 sm:p-10">
+
+      <!-- Campos principais -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <input type="hidden" th:field="*{id}" th:value="${order.id}" readonly />
+        <input type="hidden" th:field="*{orderId}" th:value="${order.orderId}" readonly />
+
+        <div class="flex flex-col">
+          <label class="text-sm font-medium mb-1">Número da Ordem</label>
+          <input th:field="*{orderNumber}" type="text" readonly
+            class="bg-gray-100 rounded-lg border border-gray-300 px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500" />
+        </div>
+
+        <div class="flex flex-col">
+          <label class="text-sm font-medium mb-1">Código</label>
+          <input th:field="*{code}" type="text" readonly
+            class="bg-gray-100 rounded-lg border border-gray-300 px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500" />
+        </div>
+
+        <div class="flex flex-col sm:col-span-2">
+          <label class="text-sm font-medium mb-1">Descrição</label>
+          <input th:field="*{description}" type="text" readonly
+            class="bg-gray-100 rounded-lg border border-gray-300 px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500" />
+        </div>
+
+        <div class="flex flex-col">
+          <label class="text-sm font-medium mb-1">Quantidade</label>
+          <input th:field="*{quantity}" type="number" required
+            class="rounded-lg border border-gray-300 px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500" />
+        </div>
+      </div>
+
+      <!-- Lista de materiais -->
+      <div class="flex flex-col gap-4 mt-6">
+        <h3 class="text-base sm:text-xl font-semibold text-purple-700">Materiais</h3>
+
+        <div th:each="material, iterStat : *{materials}"
+          class="flex flex-col gap-3 bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-6 shadow-sm">
+          <input type="hidden" th:field="*{materials[__${iterStat.index}__].id}" />
+          <input type="hidden" th:field="*{materials[__${iterStat.index}__].materialId}" />
+
+          <div class="grid grid-cols-1 sm:grid-cols-6 gap-3">
+            <div class="sm:col-span-1">
+              <label class="text-sm font-medium mb-1 block">Código</label>
+              <input type="text" th:field="*{materials[__${iterStat.index}__].code}" readonly
+                class="w-full bg-gray-100 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
+            </div>
+
+            <div class="sm:col-span-4">
+              <label class="text-sm font-medium mb-1 block">Descrição</label>
+              <input type="text" th:field="*{materials[__${iterStat.index}__].description}" readonly
+                class="w-full bg-gray-100 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
+            </div>
+
+            <div class="sm:col-span-1">
+              <label class="text-sm font-medium mb-1 block text-center">Qtd.</label>
+              <input type="number" th:field="*{materials[__${iterStat.index}__].quantity}"
+                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-center text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botão de envio -->
+      <div class="flex justify-end mt-6">
+        <button type="submit"
+          class="px-6 py-3 bg-purple-600 text-white rounded-xl text-sm sm:text-base font-semibold shadow-md hover:bg-purple-700 transition duration-200">
+          Atualizar Ordem
+        </button>
+      </div>
+    </form>
+  </main>
+
+</body>
+
+</html>
