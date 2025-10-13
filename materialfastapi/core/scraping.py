@@ -69,6 +69,20 @@ class Scraping(requests.Session):
         Args:
             order_id (int): The ID of the production order.
         """
+
+        def _parse_quantity(value: str) -> float:
+            if "," in value and "." in value:
+                value = value.replace(".", "").replace(",", ".")
+            elif "," in value:
+                value = value.replace(",", ".")
+            elif value.count(".") > 1:
+                value = value.replace(".", "")
+            try:
+                return float(value)
+            except ValueError:
+                print(f"[WARN] Valor inválido para conversão: '{value}'")
+                return 0.0
+
         url: str = "https://v2.cargamaquina.com.br/ordemProducao/visualizar/" + order_id
         try:
             response = self.get(url)
@@ -143,9 +157,6 @@ class Scraping(requests.Session):
                     material_code: str = row["Código"]
                     material_description: str = row["Nome"]
 
-                    parts = row["Quantidade"].split(" ")
-                    material_quantity = float(parts[0].replace(",", "."))
-                    material_unit = parts[1].lower() if len(parts) > 1 else ""
 
                     code_exclusion_list: list[str] = [
                         "ETQBP",
@@ -187,7 +198,9 @@ class Scraping(requests.Session):
                         for excl in description_exclusion_list
                     ):
                         continue
-
+                    parts = row["Quantidade"].split(" ")
+                    material_quantity = _parse_quantity(parts[0])
+                    material_unit = parts[1].lower() if len(parts) > 1 else ""
                     if material_unit in unit_exclusion_list:
                         continue
 
