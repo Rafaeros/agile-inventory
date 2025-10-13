@@ -12,9 +12,19 @@ import br.agile.inventory.agileinventory.model.Order;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
+    Optional<Order> findByOrderNumber(String orderNumber);
     Optional<Order> findByOrderId(Long orderId);
 
     List<Order> findFirst20By();
+
+    @Query("SELECT o FROM Order o JOIN o.product p WHERE p.code LIKE %:code%")
+    List<Order> findOrdersByProductCode(@Param("code") String code);
+
+    @Query("SELECT DISTINCT o FROM Order o " +
+       "JOIN FETCH o.product p " +
+       "LEFT JOIN FETCH o.materials m " +
+       "WHERE p.code LIKE %:code%")
+    List<Order> findOrdersByProductCodeWithMaterials(@Param("code") String code);
 
     @Query("SELECT DISTINCT o FROM Order o " +
               "LEFT JOIN FETCH o.product " +

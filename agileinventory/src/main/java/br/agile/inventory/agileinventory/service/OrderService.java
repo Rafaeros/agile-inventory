@@ -40,6 +40,18 @@ public class OrderService {
         return orderRepository.findByOrderId(orderId);
     }
 
+    public Order findByOrderNumber(String orderNumber) {
+        return orderRepository.findByOrderNumber(orderNumber).orElse(null);
+    }
+
+    public List<Order> findOrdersByProductCode(String code) {
+        return orderRepository.findOrdersByProductCode(code);
+    }
+
+    public List<Order> findOrdersByProductCodeWithMaterials(String code) {
+        return orderRepository.findOrdersByProductCodeWithMaterials(code);
+    }
+
     public List<Order> getFirst20Orders() {
         return orderRepository.findFirst20By();
     }
