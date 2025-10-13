@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" th:href="@{/img/favicon.ico}">
     <link th:href="@{/css/main.css}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>  
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <title>Ordem de Produção</title>
 </head>
@@ -101,12 +102,12 @@
     </div>
 
     <!-- Modal -->
-    <div id="add-order-modal" class="modal fixed inset-0 z-50 hidden items-center mt-5 justify-center h-full w-full overflow-y-auto"
+    <div id="add-order-modal" class="modal fixed inset-0 z-50 hidden items-center mt-5 justify-center h-full w-full overflow-y-auto h-50"
         aria-hidden="true" aria-labelledby="modal-title" role="dialog">
         <div id="backdrop" class="absolute h-full w-full inset-0 bg-black/60 transition-opacity"></div>
 
-        <div class="fixed inset-0 flex justify-center items-start sm:items-center h-full sm:h-auto mt-10 sm:mt-20 w-full p-2 sm:p-4">
-            <div id="modal-panel" class="bg-white rounded-2xl w-full sm:w-3/4 h-full sm:h-80 shadow-xl mx-auto transform transition-all"
+        <div class="fixed inset-0 flex justify-center items-start sm:items-center mt-10 sm:mt-20 w-full p-2 sm:p-4 sm:h-80">
+            <div id="modal-panel" class="bg-white rounded-2xl w-full sm:w-3/4 h-50 shadow-xl mx-auto transform transition-all"
                 role="document" tabindex="-1">
 
                 <!--Header-->
@@ -118,17 +119,22 @@
                 </div>
 
                 <!-- Forms -->
-                <div id="search-section" class="px-2 sm:px-4">
+                <div id="search-section" class="px-2 sm:px-4 sm:h-50">
                     <form th:action="@{/orders/search}" method="get"
-                        class="flex flex-col sm:flex-row items-center justify-center m-2 w-full gap-3 sm:gap-5" id="search-form">
+                        class="flex flex-row items-center justify-center m-2 w-full gap-3 sm:gap-5" id="search-form">
                         <input name="orderId" type="number" id="searchInput"
-                            class="w-full sm:w-6/12 h-10 border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
-                            placeholder="ID da Ordem de Produção" />
+                            class="w-6/12 h-10 border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+                            placeholder="ID da Ordem de Produção" required/>
                         <button id="searchBtn"
                             class="flex items-center justify-center p-3 bg-purple-600 text-white font-bold rounded-md hover:bg-purple-700 transition-colors cursor-pointer">
                             <img th:src="@{/img/search.png}" alt="Procurar" class="h-5 sm:h-6 w-5 sm:w-6">
                         </button>
+                        <button type="button" id="scanBtn" class="flex items-center justify-center p-3 bg-purple-600 text-white font-bold rounded-md hover:bg-purple-700 transition-colors cursor-pointer lg:hidden md:hidden">
+                            <img th:src="@{/img/camera.png}" alt="Procurar" class="h-5 sm:h-6 w-5 sm:w-6">
+                        </button>
                     </form>
+                    <p id="warning" class="text-sm text-yellow-500 hidden">Preencha o campo acima ou escaneie o código de barras</p>
+                    <div id="camera"></div>
                 </div>
             </div>
         </div>
