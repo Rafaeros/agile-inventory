@@ -49,7 +49,12 @@ public class OrderController {
             } else {
                 orders = orderService.getFirst20Orders();
             }
-            model.addAttribute("orders", orders);
+
+            if (orders.isEmpty()) {
+                model.addAttribute("message", "Nenhuma Ordem de Produção encontrada.");
+            } else {   
+                model.addAttribute("orders", orders);
+            }
             return "orders";
     }
 
