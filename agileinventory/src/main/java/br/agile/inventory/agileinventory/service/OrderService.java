@@ -128,4 +128,20 @@ public class OrderService {
 
         return newOrder;
     }
+
+    @Transactional
+    public Long deleteOrderMaterialById(Long orderMaterialId) {
+        OrderMaterial orderMaterial = orderMaterialService.findById(orderMaterialId);
+
+        Long orderId = orderMaterial.getOrder().getId();
+
+        orderMaterialService.deleteOrderMaterialById(orderMaterial.getId());
+
+        return orderId;
+    }
+
+    @Transactional
+    public void deleteOrder(Long id) {
+        orderRepository.deleteById(id);
+    }
 }

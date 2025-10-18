@@ -26,4 +26,12 @@ public class OrderMaterialService {
         orderMaterial.setOrder(newOrder);
         return orderMaterialRepository.save(orderMaterial);
     }
+
+    public OrderMaterial findById(Long id) {
+        return orderMaterialRepository.findById(id).orElse(null);
+    }
+
+    public void deleteOrderMaterialById(Long id) {
+        orderMaterialRepository.deleteById(id);
+    }
 }

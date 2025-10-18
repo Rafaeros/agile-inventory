@@ -133,6 +133,18 @@ public class OrderController {
         return "redirect:/orders";
     }
 
+    @PostMapping("/delete/{id}")
+    public String deleteOrder(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        OrderRequest order = orderService.findById(id);
+        try {
+            orderService.deleteOrder(order.getId());
+            redirectAttributes.addFlashAttribute("success", "Ordem de Produção " + order.getOrderNumber() + " excluida com sucesso.");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", "Erro ao excluir Ordem de Produção " + order.getOrderNumber() + ": " + e.getMessage());
+        }
+        return "redirect:/orders";
+    }
+
     @GetMapping("/export/excel")
     public ResponseEntity<byte[]> exportOrdersToExcel() throws IOException {
         List<OrderRequest> orders = orderService.getAllOrdersForExport();
@@ -147,4 +159,17 @@ public class OrderController {
                 .body(excelFile);
     }
 
+
+    @PostMapping("/materials/delete/{id}")
+    public String deleteMaterial(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        Long orderId = null;
+        try {
+            orderId = orderService.deleteOrderMaterialById(id);
+            redirectAttributes.addFlashAttribute("success", "Material excluido com sucesso.");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", "Erro ao excluir material: " + e.getMessage());
+        } 
+
+        return "redirect:/orders/edit/" + orderId;
+    }
 }
