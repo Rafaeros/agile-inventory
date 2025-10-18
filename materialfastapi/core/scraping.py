@@ -159,6 +159,8 @@ class Scraping(requests.Session):
 
 
                     code_exclusion_list: list[str] = [
+                        "ANH0",
+                        "SILNTR",
                         "ETQBP",
                         "SCPL",
                         "TBRET",
